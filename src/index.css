@@ -1,3 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?  family=Montserrat:ital,wght@0,100;0,200;1,100;1,200&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.headingFont {
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.btn {
+  @apply text-sm px-4 uppercase py-2 bg-primary text-white hover:text-primary hover:bg-white border transition-colors duration-300;
+}
+
+.ghost-btn {
+  @apply text-sm px-4 uppercase py-2 bg-transparent text-primary hover:text-white hover:bg-primary border border-gray-300 transition-colors duration-300;
+}
