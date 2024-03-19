@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box, Snackbar, Alert } from "@mui/material";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("")
@@ -16,7 +16,12 @@ const LoginPage = () => {
                 localStorage.setItem("EmailCred", email)
             }
         }
+        setEmailError(true);
     }
+
+    const handleClose = () => {
+        setEmailError(false);
+    };
 
     return (
         <Box className="flex justify-center items-center p-8 shadow-md rounded-3xl flex-wrap" style={{ background: "#F5E8DD" }}>
@@ -31,7 +36,7 @@ const LoginPage = () => {
                 >MemoShare
                 </h2>
                 <TextField
-                    onChange={(e:any) => setEmail(e.target.value)}
+                    onChange={(e: any) => setEmail(e.target.value)}
                     required
                     placeholder="Enter your email to get started..."
                     variant="standard"
@@ -46,6 +51,18 @@ const LoginPage = () => {
                     <img src="src\assets\enter.png" className="size-7 p-0" />
                 </Button>
             </div>
+
+            {/* Alert pop up to notify login was successful */}
+            <Snackbar open={emailError} autoHideDuration={1000} onClose={handleClose} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
+                <Alert
+                    onClose={handleClose}
+                    severity="success"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    U logged in successfully!!!
+                </Alert>
+            </Snackbar>
         </Box>
     );
 }
