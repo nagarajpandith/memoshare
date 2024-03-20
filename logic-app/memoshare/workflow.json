@@ -1,64 +1,133 @@
 {
-    "definition": {
-        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
-        "actions": {},
-        "contentVersion": "1.0.0.0",
-        "outputs": {},
-        "triggers": {
-            "When_a_HTTP_request_is_received": {
-                "type": "Request",
-                "kind": "Http",
-                "inputs": {
-                    "schema": {
-                        "$schema": "https://json-schema.org/draft/2019-09/schema",
-                        "$id": "http://example.com/example.json",
-                        "type": "object",
-                        "default": {},
-                        "title": "Root Schema",
-                        "required": [
-                            "email",
-                            "title",
-                            "content"
-                        ],
-                        "properties": {
-                            "email": {
-                                "type": "string",
-                                "default": "",
-                                "title": "The email Schema",
-                                "examples": [
-                                    ""
-                                ],
-                                "format": "email"
-                            },
-                            "title": {
-                                "type": "string",
-                                "default": "",
-                                "title": "The title Schema",
-                                "examples": [
-                                    "No Title provided."
-                                ]
-                            },
-                            "content": {
-                                "type": "string",
-                                "default": "",
-                                "title": "The content Schema",
-                                "examples": [
-                                    "No Content provided."
-                                ]
-                            }
-                        },
-                        "examples": [
-                            {
-                                "email": "",
-                                "title": "No Title provided.",
-                                "content": "No Content provided."
-                            }
-                        ]
-                    }
-                },
-                "operationOptions": "EnableSchemaValidation"
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "actions": {
+      "Create_blob_(V2)": {
+        "inputs": {
+          "body": "@triggerBody()['content']",
+          "headers": {
+            "ReadFileMetadataFromServer": true
+          },
+          "host": {
+            "connection": {
+              "name": "@parameters('$connections')['azureblob']['connectionId']"
             }
-        }
+          },
+          "method": "post",
+          "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+          "queries": {
+            "folderPath": "/notes",
+            "name": "@{triggerBody()['title']}.txt",
+            "queryParametersSingleEncoded": true
+          }
+        },
+        "runAfter": {},
+        "runtimeConfiguration": {
+          "contentTransfer": {
+            "transferMode": "Chunked"
+          }
+        },
+        "type": "ApiConnection"
+      },
+      "Response": {
+        "inputs": {
+          "body": "Note created successfully!",
+          "statusCode": 200
+        },
+        "kind": "Http",
+        "runAfter": {
+          "Send_email_(V2)": ["Succeeded"]
+        },
+        "type": "Response"
+      },
+      "Send_email_(V2)": {
+        "inputs": {
+          "body": {
+            "Body": "<p>Hey there!<br>\n<br>\nYou just created a note on Memoshare. Here's the details of the same:<br>\n<strong>Title</strong>: @{triggerBody()['title']}<br>\n<strong>Download link</strong>: https://memoshare.blob.core.windows.net/notes/@{body('Create_blob_(V2)')?['Path']}<br>\n<strong>Date</strong>: @{body('Create_blob_(V2)')?['LastModified']}<br>\n<br>\n<br>\n<br>\nThanks for using MemoShare.</p>",
+            "Subject": "Memoshare - Your note is ready!",
+            "To": "@triggerBody()['email']"
+          },
+          "host": {
+            "connection": {
+              "name": "@parameters('$connections')['gmail_1']['connectionId']"
+            }
+          },
+          "method": "post",
+          "path": "/v2/Mail"
+        },
+        "runAfter": {
+          "Create_blob_(V2)": ["Succeeded"]
+        },
+        "type": "ApiConnection"
+      }
     },
-    "kind": "Stateful"
+    "contentVersion": "1.0.0.0",
+    "outputs": {},
+    "parameters": {
+      "$connections": {
+        "defaultValue": {},
+        "type": "Object"
+      }
+    },
+    "triggers": {
+      "manual": {
+        "inputs": {
+          "schema": {
+            "$id": "http://example.com/example.json",
+            "$schema": "https://json-schema.org/draft/2019-09/schema",
+            "default": {},
+            "examples": [
+              {
+                "content": "Hello, this is my note. Today's a good day.",
+                "email": "",
+                "title": "Note title 1"
+              }
+            ],
+            "properties": {
+              "content": {
+                "default": "No Content provided.",
+                "examples": ["Hello, this is my note. Today's a good day."],
+                "title": "The content Schema",
+                "type": "string"
+              },
+              "email": {
+                "default": "",
+                "examples": [""],
+                "format": "email",
+                "title": "The email Schema",
+                "type": "string"
+              },
+              "title": {
+                "default": "No Title provided.",
+                "examples": ["Note Title 1"],
+                "title": "The title Schema",
+                "type": "string"
+              }
+            },
+            "required": ["email", "title", "content"],
+            "title": "Root Schema",
+            "type": "object"
+          }
+        },
+        "kind": "Http",
+        "type": "Request"
+      }
+    }
+  },
+  "parameters": {
+    "$connections": {
+      "value": {
+        "azureblob": {
+          "connectionId": "/subscriptions/6c173812-750f-43c5-9d81-e228c7de9cee/resourceGroups/memoshare_group/providers/Microsoft.Web/connections/azureblob-1",
+          "connectionName": "azureblob-1",
+          "id": "/subscriptions/6c173812-750f-43c5-9d81-e228c7de9cee/providers/Microsoft.Web/locations/eastus/managedApis/azureblob"
+        },
+        "gmail_1": {
+          "connectionId": "/subscriptions/6c173812-750f-43c5-9d81-e228c7de9cee/resourceGroups/memoshare_group/providers/Microsoft.Web/connections/gmail-12",
+          "connectionName": "gmail-12",
+          "id": "/subscriptions/6c173812-750f-43c5-9d81-e228c7de9cee/providers/Microsoft.Web/locations/eastus/managedApis/gmail"
+        }
+      }
+    }
+  }
 }
