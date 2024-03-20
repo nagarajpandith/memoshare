@@ -16,12 +16,8 @@ export const MemoCreate: React.FC<{
   const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
-    const emailCred = JSON.stringify(localStorage.getItem('EmailCred'));
-    if (emailCred != 'null') {
-      setEmail(emailCred);
-    } else {
-      setEmail('');
-    }
+    const emailCred = localStorage.getItem('EmailCred');
+    if (emailCred) setEmail(emailCred);
   }, []);
 
   const handleClose = () => {
@@ -31,6 +27,9 @@ export const MemoCreate: React.FC<{
   async function postData(url = '', data = {}) {
     const response = await fetch(url, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(data),
     });
     return response.json();
