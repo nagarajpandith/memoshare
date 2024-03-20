@@ -5,7 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const MemoCreate: React.FC<{
   open: boolean;
@@ -13,10 +13,28 @@ export const MemoCreate: React.FC<{
 }> = ({ open, setOpen }) => {
   const [noteTitle, setnoteTitle] = useState<string>('');
   const [noteContent, setnoteContent] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+
+  useEffect(() => {
+    const emailCred = JSON.stringify(localStorage.getItem('EmailCred'));
+    if (emailCred != 'null') {
+      setEmail(emailCred);
+    } else {
+      setEmail('');
+    }
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  async function postData(url = '', data = {}) {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  }
 
   return (
     <Box>
@@ -69,7 +87,24 @@ export const MemoCreate: React.FC<{
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Create</Button>
+          <Button
+            type="submit"
+            onClick={() => {
+              if (!email) return console.log('email not found');
+              postData(
+                'https://prod-91.eastus.logic.azure.com/workflows/8738d724d71e4889a43b46be70a28d39/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2mhH0x5L_xdgEnqvG4mMrNfLJbil55wm_aP8ICvAaes',
+                {
+                  email,
+                  title: noteTitle,
+                  content: noteContent,
+                }
+              ).then((data) => {
+                console.log(data);
+              });
+            }}
+          >
+            Create
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>
