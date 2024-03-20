@@ -25,9 +25,9 @@ function App() {
   return (
     <main className="min-h-screen flex justify-center items-center flex-col" style={{ background: "#FBF3D5" }}>
       {
-        userExist ? <MemoDashboard /> : <LoginPage changeUserExist={setUserExist} setEmailError={setEmailError}/>
+        userExist ? <MemoDashboard changeUserExist={setUserExist} /> : <LoginPage changeUserExist={setUserExist} setEmailError={setEmailError} />
       }
-      
+
       {/* Alert pop up to notify login was successful */}
       <Snackbar open={emailError} autoHideDuration={1000} onClose={handleClose} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
         <Alert

@@ -1,9 +1,20 @@
 import { Box, Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import MemoCard from "./MemoCard";
-import {data,Memo} from "../data/DummyData";
+import { data, Memo } from "../data/DummyData";
 
-const MemoDashboard = () => {
+const MemoDashboard: React.FC<any> = ({ changeUserExist }) => {
+
+    const createNote = () => {
+
+    }
+
+    const logout = () => {
+        localStorage.removeItem("EmailCred");
+        changeUserExist(false);
+    }
+
+
     return (
         <Box className="flex flex-row justify-start items-center rounded-3xl shadow-md p-20 flex-wrap" style={{ background: "#F5E8DD" }}>
             <h1
@@ -16,13 +27,25 @@ const MemoDashboard = () => {
                 Start sharing your notes now
             </h4>
 
-            <Button
-            className="justify-start bottom-5"
-            variant="outlined" startIcon={<Add />}>
-                Create Note
-            </Button>
+            <Box className="w-full flex flex-row justify-between">
+                <Button
+                    onClick={createNote}
+                    className="justify-start bottom-5"
+                    variant="outlined" startIcon={<Add />}>
+                    Create Note
+                </Button>
+
+                <Button
+                    onClick={logout}
+                    color="error"
+                    className="justify-end bottom-5"
+                    variant="outlined" >
+                    Log out
+                </Button>
+            </Box>
+
             {
-                data.map((memo:Memo)=>{
+                data.map((memo: Memo) => {
                     return <MemoCard
                         Title={memo.Title}
                         Shared={memo.Shared}
