@@ -1,10 +1,64 @@
 {
-  "definition": {
-    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
-    "actions": {},
-    "contentVersion": "1.0.0.0",
-    "outputs": {},
-    "triggers": {}
-  },
-  "kind": "Stateful"
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {},
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "When_a_HTTP_request_is_received": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {
+                    "schema": {
+                        "$schema": "https://json-schema.org/draft/2019-09/schema",
+                        "$id": "http://example.com/example.json",
+                        "type": "object",
+                        "default": {},
+                        "title": "Root Schema",
+                        "required": [
+                            "email",
+                            "title",
+                            "content"
+                        ],
+                        "properties": {
+                            "email": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The email Schema",
+                                "examples": [
+                                    ""
+                                ],
+                                "format": "email"
+                            },
+                            "title": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The title Schema",
+                                "examples": [
+                                    "No Title provided."
+                                ]
+                            },
+                            "content": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The content Schema",
+                                "examples": [
+                                    "No Content provided."
+                                ]
+                            }
+                        },
+                        "examples": [
+                            {
+                                "email": "",
+                                "title": "No Title provided.",
+                                "content": "No Content provided."
+                            }
+                        ]
+                    }
+                },
+                "operationOptions": "EnableSchemaValidation"
+            }
+        }
+    },
+    "kind": "Stateful"
 }
