@@ -68,8 +68,8 @@ const MemoDashboard: React.FC<{
         </Button>
       </Box>
 
-      {data.map((memo: Memo) => {
-        return <MemoCard Title={memo.Title} Shared={memo.Shared} />;
+      {data.map((memo: Memo, i) => {
+        return <MemoCard key={i} Title={memo.Title} Shared={memo.Shared} />;
       })}
       <Snackbar
         open={createAlert}
