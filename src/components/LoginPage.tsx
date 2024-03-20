@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { TextField, Button, Box, Snackbar, Alert } from "@mui/material";
+import { TextField, Button, Box } from "@mui/material";
 
-const LoginPage = () => {
+const LoginPage: React.FC<any> = ({ changeUserExist, setEmailError }) => {
+
     const [email, setEmail] = useState("")
-    const [emailError, setEmailError] = useState(false)
 
     const handleSubmit = () => {
         if (email == '') {
@@ -12,16 +12,15 @@ const LoginPage = () => {
             const emailCred = JSON.stringify(localStorage.getItem('EmailCred'))
             if (emailCred != "null") {
                 /// continue with the found email => emailCred
+                console.log("found");
+
             } else {
                 localStorage.setItem("EmailCred", email)
             }
+            changeUserExist(true);
         }
         setEmailError(true);
     }
-
-    const handleClose = () => {
-        setEmailError(false);
-    };
 
     return (
         <Box className="flex justify-center items-center p-8 shadow-md rounded-3xl flex-wrap" style={{ background: "#F5E8DD" }}>
@@ -44,7 +43,6 @@ const LoginPage = () => {
                     type="email"
                     sx={{ bottom: 3 }}
                     value={email}
-                    error={emailError}
 
                 />
                 <Button variant="text" color="primary" onClick={handleSubmit} >
@@ -52,17 +50,6 @@ const LoginPage = () => {
                 </Button>
             </div>
 
-            {/* Alert pop up to notify login was successful */}
-            <Snackbar open={emailError} autoHideDuration={1000} onClose={handleClose} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
-                <Alert
-                    onClose={handleClose}
-                    severity="success"
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    U logged in successfully!!!
-                </Alert>
-            </Snackbar>
         </Box>
     );
 }
