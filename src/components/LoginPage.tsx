@@ -1,22 +1,22 @@
-import { useState } from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import { useState } from "react";
+import { TextField, Button, Box } from "@mui/material";
 
 const LoginPage: React.FC<{
   changeUserExist: React.Dispatch<React.SetStateAction<boolean>>;
   setEmailError: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ changeUserExist, setEmailError }) => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
   const handleSubmit = () => {
-    if (email == '') {
+    if (email == "") {
       setEmailError(true);
     } else {
-      const emailCred = JSON.stringify(localStorage.getItem('EmailCred'));
-      if (emailCred != 'null') {
+      const emailCred = JSON.stringify(localStorage.getItem("EmailCred"));
+      if (emailCred != "null") {
         /// continue with the found email => emailCred
-        console.log('found');
+        console.log("found");
       } else {
-        localStorage.setItem('EmailCred', email);
+        localStorage.setItem("EmailCred", email);
       }
       changeUserExist(true);
     }
@@ -26,19 +26,19 @@ const LoginPage: React.FC<{
   return (
     <Box
       className="flex justify-center items-center p-8 shadow-md rounded-3xl flex-wrap"
-      style={{ background: '#F5E8DD' }}
+      style={{ background: "#F5E8DD" }}
     >
       <form action="" onSubmit={handleSubmit}>
         <div
           className="w-full text-center"
-          style={{ fontFamily: 'Delicious Handrawn', fontSize: '2em' }}
+          style={{ fontFamily: "Delicious Handrawn", fontSize: "2em" }}
         >
-          👋 Welcome to{' '}
+          👋 Welcome to{" "}
         </div>
         <div>
           <h2
             className="text-center"
-            style={{ fontFamily: 'Delicious Handrawn', fontSize: '4em' }}
+            style={{ fontFamily: "Delicious Handrawn", fontSize: "4em" }}
           >
             MemoShare
           </h2>

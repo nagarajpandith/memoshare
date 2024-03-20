@@ -1,26 +1,29 @@
-import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import { useEffect, useState } from 'react';
+import { Box } from "@mui/material";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useEffect, useState } from "react";
+import { url } from "../data/DummyData";
 
 export const MemoCreate: React.FC<{
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ open, setOpen }) => {
-  const [noteTitle, setnoteTitle] = useState<string>('');
-  const [noteContent, setnoteContent] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
+  alertSet: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ open, setOpen, alertSet }) => {
+  const [noteTitle, setnoteTitle] = useState<string>("");
+  const [noteContent, setnoteContent] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
-    const emailCred = JSON.stringify(localStorage.getItem('EmailCred'));
-    if (emailCred != 'null') {
-      setEmail(emailCred);
+    const emailCred = JSON.stringify(localStorage.getItem("EmailCred"));
+    if (emailCred != "null") {
+      const emailChanged = emailCred.substring(1, emailCred.length - 1);
+      setEmail(emailChanged);
     } else {
-      setEmail('');
+      setEmail("");
     }
   }, []);
 
@@ -28,9 +31,12 @@ export const MemoCreate: React.FC<{
     setOpen(false);
   };
 
-  async function postData(url = '', data = {}) {
+  async function postData(url = "", data = {}) {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     });
     return response.json();
@@ -42,7 +48,7 @@ export const MemoCreate: React.FC<{
         open={open}
         onClose={handleClose}
         PaperProps={{
-          component: 'form',
+          component: "form",
           onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             //handleSetBody();
@@ -54,7 +60,7 @@ export const MemoCreate: React.FC<{
         }}
       >
         <DialogTitle
-          style={{ fontFamily: 'Delicious Handrawn', fontSize: '2em' }}
+          style={{ fontFamily: "Delicious Handrawn", fontSize: "2em" }}
         >
           Create your note
         </DialogTitle>
@@ -90,17 +96,21 @@ export const MemoCreate: React.FC<{
           <Button
             type="submit"
             onClick={() => {
-              if (!email) return console.log('email not found');
-              postData(
-                'https://prod-91.eastus.logic.azure.com/workflows/8738d724d71e4889a43b46be70a28d39/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2mhH0x5L_xdgEnqvG4mMrNfLJbil55wm_aP8ICvAaes',
-                {
-                  email,
-                  title: noteTitle,
-                  content: noteContent,
-                }
-              ).then((data) => {
+              if (!email) return console.log("email not found");
+              console.log({
+                email,
+                title: noteTitle,
+                content: noteContent,
+              });
+
+              postData(url, {
+                email,
+                title: noteTitle,
+                content: noteContent,
+              }).then((data) => {
                 console.log(data);
               });
+              alertSet(true);
             }}
           >
             Create
