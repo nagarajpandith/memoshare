@@ -1,12 +1,16 @@
+import { useState } from "react";
 import { Box, Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import MemoCard from "./MemoCard";
 import { data, Memo } from "../data/DummyData";
+import { MemoCreate } from "./MemoCreate";
 
 const MemoDashboard: React.FC<any> = ({ changeUserExist }) => {
 
-    const createNote = () => {
+    const [open, setOpen] = useState(false);
 
+    const createNote = () => {
+        setOpen(true)
     }
 
     const logout = () => {
@@ -17,6 +21,9 @@ const MemoDashboard: React.FC<any> = ({ changeUserExist }) => {
 
     return (
         <Box className="flex flex-row justify-start items-center rounded-3xl shadow-md p-20 flex-wrap" style={{ background: "#F5E8DD" }}>
+            {
+                open ? <MemoCreate open={open} setOpen={setOpen} /> : <></>
+            }
             <h1
                 className="text-center w-full"
                 style={{ fontFamily: "Delicious Handrawn", fontSize: "4em" }}>MemoShare
