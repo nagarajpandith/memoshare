@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Box, Button } from '@mui/material';
-import { Add } from '@mui/icons-material';
+import { Box } from '@mui/material';
+import { Add, Logout } from '@mui/icons-material';
 import MemoCard from './MemoCard';
 import { MemoCreate } from './MemoCreate';
 import { Note } from '../data/DummyData';
@@ -39,10 +39,7 @@ const MemoDashboard: React.FC<{
   };
 
   return (
-    <Box
-      className="flex flex-row justify-start items-center rounded-3xl shadow-md p-20 flex-wrap mx-20"
-      style={{ background: '#F5E8DD' }}
-    >
+    <Box className="flex flex-row justify-start items-center shadow-md p-20 flex-wrap mx-20 bg-gray-100">
       {open ? (
         <MemoCreate
           open={open}
@@ -67,23 +64,22 @@ const MemoDashboard: React.FC<{
       </h4>
 
       <Box className="w-full flex flex-row justify-between">
-        <Button
+        <button
           onClick={createNote}
-          className="justify-start bottom-5"
-          variant="outlined"
-          startIcon={<Add />}
+          className="justify-start bottom-5 flex items-center gap-1 btn"
         >
+          <Add fontSize={'small'} />
           Create Note
-        </Button>
+        </button>
 
-        <Button
+        <button
           onClick={logout}
           color="error"
-          className="justify-end bottom-5"
-          variant="outlined"
+          className="justify-end bottom-5 danger-btn flex items-center gap-1"
         >
+          <Logout fontSize={'small'} />
           Log out
-        </Button>
+        </button>
       </Box>
 
       {memoList.length ? (

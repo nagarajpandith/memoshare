@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -75,64 +74,71 @@ export const MemoCreate: React.FC<{
           Create your note
         </DialogTitle>
         <DialogContent>
-          <TextField
-            required
-            id="Title"
-            name="Title"
-            label="Enter the title"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={noteTitle}
-            onChange={(e) => setnoteTitle(e.target.value)}
-          />
-          <TextField
-            required
-            id="Content"
-            name="Content"
-            label="Enter the Content"
-            type="text"
-            fullWidth
-            variant="outlined"
-            multiline
-            rows={5}
-            className="top-2"
-            value={noteContent}
-            onChange={(e) => setnoteContent(e.target.value)}
-          />
+          <div className="pt-2">
+            <TextField
+              required
+              id="Title"
+              name="Title"
+              label="Enter the title"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={noteTitle}
+              onChange={(e) => setnoteTitle(e.target.value)}
+            />
+            <TextField
+              required
+              id="Content"
+              name="Content"
+              label="Enter the Content"
+              type="text"
+              fullWidth
+              variant="outlined"
+              multiline
+              rows={5}
+              className="top-3 !rounded-none"
+              value={noteContent}
+              onChange={(e) => setnoteContent(e.target.value)}
+            />
+          </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button
-            type="submit"
-            onClick={() => {
-              if (!email) return toast.error('email not found');
-              toast.loading('Creating your note...', {
-                id: 'memoCreate',
-              });
-              postData(url, {
-                email,
-                title: noteTitle,
-                content: noteContent,
-              }).then((data) => {
-                toast.dismiss('memoCreate');
-                console.log(data);
-                if (data.error) {
-                  toast.error('Something went wrong', {
-                    style: {
-                      backgroundColor: 'red',
-                      color: 'white',
-                    },
-                  });
-                } else {
-                  handleSetMemo(data.link);
-                  toast.success(data.message);
-                }
-              });
-            }}
-          >
-            Create
-          </Button>
+          <div className="flex justify-between w-full px-4 pb-2">
+            <button onClick={handleClose} className="danger-btn">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn"
+              onClick={() => {
+                if (!email) return toast.error('email not found');
+                toast.loading('Creating your note...', {
+                  id: 'memoCreate',
+                });
+                postData(url, {
+                  email,
+                  title: noteTitle,
+                  content: noteContent,
+                }).then((data) => {
+                  toast.dismiss('memoCreate');
+                  console.log(data);
+                  if (data.error) {
+                    toast.error('Something went wrong', {
+                      style: {
+                        backgroundColor: 'red',
+                        color: 'white',
+                      },
+                    });
+                  } else {
+                    handleSetMemo(data.link);
+                    toast.success(data.message);
+                  }
+                });
+              }}
+            >
+              Create
+            </button>
+          </div>
         </DialogActions>
       </Dialog>
     </Box>

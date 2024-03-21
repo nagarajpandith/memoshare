@@ -18,7 +18,11 @@ function App() {
   return (
     <main
       className="min-h-screen flex justify-center items-center flex-col"
-      style={{ background: '#FBF3D5' }}
+      style={{
+        backgroundImage: `url('https://picsum.photos/1024/928?blur')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
     >
       {userExist ? (
         <MemoDashboard changeUserExist={setUserExist} />

@@ -22,3 +22,7 @@
 .ghost-btn {
   @apply text-sm px-4 uppercase py-2 bg-transparent text-primary hover:text-white hover:bg-primary border border-gray-300 transition-colors duration-300;
 }
+
+.danger-btn {
+  @apply text-sm px-4 uppercase py-2 bg-transparent text-red-500 hover:text-white hover:bg-red-500 border border-red-300 transition-colors duration-300;
+}

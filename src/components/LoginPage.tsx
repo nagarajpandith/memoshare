@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import { TextField, Box } from '@mui/material';
 import { toast } from 'sonner';
 
 const LoginPage: React.FC<{
@@ -23,10 +23,7 @@ const LoginPage: React.FC<{
   };
 
   return (
-    <Box
-      className="flex justify-center items-center p-8 shadow-md rounded-3xl flex-wrap"
-      style={{ background: '#F5E8DD' }}
-    >
+    <Box className="flex justify-center items-center p-8 shadow-md flex-wrap w-1/2 bg-gray-100">
       <form action="" onSubmit={handleSubmit}>
         <div
           className="w-full text-center"
@@ -34,28 +31,30 @@ const LoginPage: React.FC<{
         >
           👋 Welcome to{' '}
         </div>
-        <div>
+        <div className="flex gap-5 flex-col">
           <h2
             className="text-center"
             style={{ fontFamily: 'Delicious Handrawn', fontSize: '4em' }}
           >
             MemoShare
           </h2>
-          <TextField
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
-            required
-            placeholder="Enter your email to get started..."
-            variant="standard"
-            color="secondary"
-            type="email"
-            sx={{ bottom: 3 }}
-            value={email}
-          />
-          <Button variant="text" color="primary" type="submit">
-            <img src="src\assets\enter.png" className="size-7 p-0" />
-          </Button>
+          <div className="flex items-center gap-4">
+            <TextField
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
+              required
+              placeholder="Enter email..."
+              variant="standard"
+              color="secondary"
+              type="email"
+              sx={{ bottom: 3 }}
+              value={email}
+            />
+            <button color="primary" type="submit">
+              <img src="src\assets\enter.png" className="size-7 p-0" />
+            </button>
+          </div>
         </div>
       </form>
     </Box>

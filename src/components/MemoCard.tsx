@@ -1,5 +1,5 @@
 import { Download, Share } from '@mui/icons-material';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { toast } from 'sonner';
 
@@ -10,9 +10,9 @@ const MemoCard: React.FC<{
 }> = ({ title, content, link }) => {
   return (
     <Box
-      className="shadow-md w-full p-2 rounded-md my-2"
+      className="shadow-md w-full p-2 rounded-md my-5 py-5"
       sx={{ flexGrow: 1 }}
-      style={{ background: '#F1EF99' }}
+      style={{ background: '#ffffff' }}
     >
       <Grid
         container
@@ -30,11 +30,8 @@ const MemoCard: React.FC<{
           </h1>
         </Grid>
         <Grid item xs={2}>
-          <Button
-            variant="text"
-            startIcon={<Share />}
+          <button
             style={{
-              color: 'black',
               fontFamily: 'Delicious Handrawn',
               fontSize: '1.2em',
             }}
@@ -42,9 +39,11 @@ const MemoCard: React.FC<{
               navigator.clipboard.writeText(link);
               toast.success('Shared successfully!');
             }}
+            className="flex items-center gap-2 btn"
           >
+            <Share fontSize="small" />
             Share note
-          </Button>
+          </button>
         </Grid>
         <Grid item xs={10}>
           <h3
@@ -56,11 +55,8 @@ const MemoCard: React.FC<{
         </Grid>
 
         <Grid item xs={2}>
-          <Button
-            variant="text"
-            startIcon={<Download />}
+          <button
             style={{
-              color: 'black',
               fontFamily: 'Delicious Handrawn',
               fontSize: '1.2em',
             }}
@@ -68,9 +64,11 @@ const MemoCard: React.FC<{
               window.open(link, '_blank');
               toast.success('Downloaded successfully!');
             }}
+            className="flex items-center gap-2 ghost-btn"
           >
+            <Download fontSize="small" />
             Download
-          </Button>
+          </button>
         </Grid>
       </Grid>
     </Box>
