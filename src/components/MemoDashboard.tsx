@@ -1,16 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import MemoCard from "./MemoCard";
-import { data, Memo } from "../data/DummyData";
 import { MemoCreate } from "./MemoCreate";
 import { Snackbar, Alert } from "@mui/material";
+import { Note } from "../data/DummyData";
 
 const MemoDashboard: React.FC<{
   changeUserExist: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ changeUserExist }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [createAlert, setCreateAlert] = useState<boolean>(false);
+  const [memoList, setMemoList] = useState<Note[]>([]);
+
+  useEffect(() => {
+    let list = JSON.parse(
+      JSON.stringify(localStorage.getItem("MemoList") || "[]")
+    );
+
+    list = JSON.parse(list);
+    console.log(typeof list + list);
+
+    if (list == null || list?.length == 0) {
+      setMemoList([]);
+    } else {
+      setMemoList(list);
+    }
+  }, [createAlert]);
 
   const createNote = () => {
     setOpen(true);
@@ -18,6 +34,7 @@ const MemoDashboard: React.FC<{
 
   const logout = () => {
     localStorage.removeItem("EmailCred");
+    localStorage.removeItem("MemoList");
     changeUserExist(false);
   };
 
@@ -27,11 +44,17 @@ const MemoDashboard: React.FC<{
 
   return (
     <Box
-      className="flex flex-row justify-start items-center rounded-3xl shadow-md p-20 flex-wrap"
+      className="flex flex-row justify-start items-center rounded-3xl shadow-md p-20 flex-wrap mx-20"
       style={{ background: "#F5E8DD" }}
     >
       {open ? (
-        <MemoCreate open={open} setOpen={setOpen} alertSet={setCreateAlert} />
+        <MemoCreate
+          open={open}
+          setOpen={setOpen}
+          alertSet={setCreateAlert}
+          memoList={memoList}
+          setMemoList={setMemoList}
+        />
       ) : (
         <></>
       )}
@@ -68,9 +91,17 @@ const MemoDashboard: React.FC<{
         </Button>
       </Box>
 
-      {data.map((memo: Memo, i) => {
-        return <MemoCard key={i} Title={memo.Title} Shared={memo.Shared} />;
-      })}
+      {memoList.length ? (
+        memoList?.map((memo: Note, i) => {
+          return <MemoCard key={i} title={memo.title} content={memo.content} />;
+        })
+      ) : (
+        <Box className="flex flex-row justify-center items-center w-full">
+          <p style={{ fontFamily: "Delicious Handrawn", fontSize: "2em" }}>
+            No memo yet
+          </p>
+        </Box>
+      )}
       <Snackbar
         open={createAlert}
         autoHideDuration={2000}

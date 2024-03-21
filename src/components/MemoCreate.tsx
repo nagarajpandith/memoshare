@@ -7,12 +7,15 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useEffect, useState } from "react";
 import { url } from "../data/DummyData";
+import { Note } from "../data/DummyData";
 
 export const MemoCreate: React.FC<{
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   alertSet: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ open, setOpen, alertSet }) => {
+  memoList: Note[];
+  setMemoList: React.Dispatch<React.SetStateAction<Array<Note>>>;
+}> = ({ open, setOpen, alertSet, memoList, setMemoList }) => {
   const [noteTitle, setnoteTitle] = useState<string>("");
   const [noteContent, setnoteContent] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -41,6 +44,13 @@ export const MemoCreate: React.FC<{
     });
     return response.json();
   }
+
+  const handleSetMemo = () => {
+    const tempList: Note[] = [...memoList];
+    tempList.push({ title: noteTitle, content: noteContent });
+    localStorage.setItem("MemoList", JSON.stringify(tempList));
+    setMemoList(tempList);
+  };
 
   return (
     <Box>
@@ -103,6 +113,8 @@ export const MemoCreate: React.FC<{
                 content: noteContent,
               });
 
+              handleSetMemo();
+
               postData(url, {
                 email,
                 title: noteTitle,
@@ -110,6 +122,7 @@ export const MemoCreate: React.FC<{
               }).then((data) => {
                 console.log(data);
               });
+
               alertSet(true);
             }}
           >
