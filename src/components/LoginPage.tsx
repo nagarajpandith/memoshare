@@ -1,44 +1,43 @@
-import { useState } from "react";
-import { TextField, Button, Box } from "@mui/material";
+import { useState } from 'react';
+import { TextField, Button, Box } from '@mui/material';
+import { toast } from 'sonner';
 
 const LoginPage: React.FC<{
   changeUserExist: React.Dispatch<React.SetStateAction<boolean>>;
-  setEmailError: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ changeUserExist, setEmailError }) => {
-  const [email, setEmail] = useState("");
+}> = ({ changeUserExist }) => {
+  const [email, setEmail] = useState('');
 
   const handleSubmit = () => {
-    if (email == "") {
-      setEmailError(true);
+    if (email == '') {
+      return toast.error('Please enter your email');
     } else {
-      const emailCred = JSON.stringify(localStorage.getItem("EmailCred"));
-      if (emailCred != "null") {
-        /// continue with the found email => emailCred
-        console.log("found");
+      const emailCred = JSON.stringify(localStorage.getItem('EmailCred'));
+      if (emailCred != 'null') {
+        return;
       } else {
-        localStorage.setItem("EmailCred", email);
+        toast.success('Logged in successfully!');
+        localStorage.setItem('EmailCred', email);
       }
       changeUserExist(true);
     }
-    setEmailError(true);
   };
 
   return (
     <Box
       className="flex justify-center items-center p-8 shadow-md rounded-3xl flex-wrap"
-      style={{ background: "#F5E8DD" }}
+      style={{ background: '#F5E8DD' }}
     >
       <form action="" onSubmit={handleSubmit}>
         <div
           className="w-full text-center"
-          style={{ fontFamily: "Delicious Handrawn", fontSize: "2em" }}
+          style={{ fontFamily: 'Delicious Handrawn', fontSize: '2em' }}
         >
-          👋 Welcome to{" "}
+          👋 Welcome to{' '}
         </div>
         <div>
           <h2
             className="text-center"
-            style={{ fontFamily: "Delicious Handrawn", fontSize: "4em" }}
+            style={{ fontFamily: 'Delicious Handrawn', fontSize: '4em' }}
           >
             MemoShare
           </h2>

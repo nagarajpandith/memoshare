@@ -31,7 +31,10 @@
       },
       "Response": {
         "inputs": {
-          "body": "Note created successfully!",
+          "body": {
+            "link": "https://memoshare.blob.core.windows.net@{body('Create_blob_(V2)')?['Path']}",
+            "message": "Note created successfully"
+          },
           "statusCode": 200
         },
         "kind": "Http",
@@ -43,7 +46,7 @@
       "Send_email_(V2)": {
         "inputs": {
           "body": {
-            "Body": "<p>Hey there!<br>\n<br>\nYou just created a note on Memoshare. Here's the details of the same:<br>\n<strong>Title</strong>: @{triggerBody()['title']}<br>\n<strong>Download link</strong>: https://memoshare.blob.core.windows.net/notes/@{body('Create_blob_(V2)')?['Path']}<br>\n<strong>Date</strong>: @{body('Create_blob_(V2)')?['LastModified']}<br>\n<br>\nThanks for using MemoShare.</p>",
+            "Body": "<p>Hey there!<br>\n<br>\nYou just created a note on Memoshare. Here's the details of the same:<br>\n<strong>Title</strong>: @{triggerBody()['title']}<br>\n<strong>Download link</strong>: https://memoshare.blob.core.windows.net@{body('Create_blob_(V2)')?['Path']}<br>\n<strong>Date</strong>: @{body('Create_blob_(V2)')?['LastModified']}<br>\n<br>\nThanks for using MemoShare.</p>",
             "Subject": "Memoshare - Your note is ready!",
             "To": "@triggerBody()['email']"
           },
